@@ -48,7 +48,7 @@ class OrderItem(Base):
     order_id = Column(BigInteger,ForeignKey("orders.id"),index=True,nullable=False)
     product_id = Column(BigInteger,ForeignKey("products.id"),index=True,nullable=False)
     quantity  = Column(Integer,nullable=False)
-    price_snapshot = Column(Numeric(10,2)nullable=False)
+    price_snapshot = Column(Numeric(10,2),nullable=False)
     
     order = relationship("Order", back_populates="items"
     )
