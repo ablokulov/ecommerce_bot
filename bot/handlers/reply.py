@@ -1,7 +1,26 @@
 
-from telegram import KeyboardButton,ReplyKeyboardMarkup
+from telegram.ext import ContextTypes
+from telegram import Update
+from telegram import (
+    KeyboardButton,ReplyKeyboardMarkup
+)
 
-async def start(update,context):
+from database.session import SessionLocal
+from repositories.user_repo import UserRepository
+from models import Product
+
+
+
+async def start_handler(update:Update,context:ContextTypes):
+    
+    session = SessionLocal()
+    repo = UserRepository(session)
+    
+    telegram_id = update.effective_user.id
+    full_name = update.effective_user.full_name
+    
+    repo.get_or_create_user(telegram_id,full_name)
+    
     
     keyboard = [
         [
@@ -21,6 +40,10 @@ Bizning online do‘konga xush kelibsiz. Bu yerda siz turli mahsulotlarni ko‘r
 
 Quyidagi menyudan kerakli bo‘limni tanlang 👇
 """,reply_markup = reply_kb),
+    
+    session.close()
+    
+    
     
 async def helping(update,context):
     
@@ -48,7 +71,10 @@ async def products_handler(update,context):
         ],
         [
             KeyboardButton('📱 Elektronika'),
-            KeyboardButton('⌚ Aksessuarlar')
+            KeyboardButton('🎒 Aksessuarlar')
+        ],
+        [
+            KeyboardButton('🏘 Bosh meniu')
         ]
     ]
     
@@ -60,3 +86,19 @@ async def products_handler(update,context):
 
 Kerakli kategoriyani tanlang 👇
 """,reply_markup=reply_kb)
+    
+
+async def show_menu_handler(update: Update, context:ContextTypes.DEFAULT_TYPE):
+    
+    keyboard = [
+        [
+            KeyboardButton("🛍 Mahsulotlar"),
+            KeyboardButton("🛒 Savat")
+        ],
+        [KeyboardButton("📦 Buyurtmalarim")],
+        [KeyboardButton("📞 Bog‘lanish")]
+    ]
+    
+    reply_kb = ReplyKeyboardMarkup(keyboard,resize_keyboard=True)
+    
+    await update.message.reply_text("🏘 Siz Bosh Menyudasz \n Quyidagi menyudan kerakli bo‘limni tanlang 👇",reply_markup=reply_kb)

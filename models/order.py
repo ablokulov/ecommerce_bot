@@ -12,7 +12,8 @@ from sqlalchemy import (
     Integer
 )
 
-from models.base import Base
+from models import Base
+
 
 class Status(enum.Enum):
     PENDING = "pending"

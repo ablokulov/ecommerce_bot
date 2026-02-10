@@ -7,7 +7,7 @@ from sqlalchemy import (
     DateTime  
 )
 
-from models.base import Base
+from models import Base
 
 
 class User(Base):
