@@ -83,3 +83,4 @@ async def product_detail(update: Update, context: ContextTypes.DEFAULT_TYPE):
             parse_mode="HTML",
             reply_markup=reply_markup
         )
+
