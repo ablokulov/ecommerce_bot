@@ -286,7 +286,7 @@ async def get_address(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 CartItem.cart_id == cart.id
             ).delete(synchronize_session=False)
 
-        # 🔚 session.begin() chiqishi → avtomatik commit
 
     await update.message.reply_text("✅ Buyurtma qabul qilindi!")
     return ConversationHandler.END
+
