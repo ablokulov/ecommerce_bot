@@ -4,4 +4,3 @@ from database.connection import engine
 SessionLocal = sessionmaker(bind=engine)
 
 
-print(SessionLocal)
