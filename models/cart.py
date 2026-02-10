@@ -37,7 +37,7 @@ class CartItem(Base):
     __tablename__ = "cartitems"
     
     id = Column(BigInteger,primary_key=True)
-    cart_id = Column(BigInteger,ForeignKey("carts.id"),nullable=False,unique=True)
+    cart_id = Column(BigInteger,ForeignKey("carts.id"),nullable=False)
     product_id = Column(BigInteger,ForeignKey("products.id"),nullable=False)
     quantity = Column(Integer,nullable=False,default=1)
     cart = relationship("Cart", back_populates="items")

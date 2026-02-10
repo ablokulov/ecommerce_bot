@@ -1,5 +1,4 @@
 
-from sqlalchemy import select
 from telegram.ext import ContextTypes
 from telegram import Update
 from telegram import (

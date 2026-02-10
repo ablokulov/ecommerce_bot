@@ -3,7 +3,7 @@ from .user import User
 from .product import Product
 from .category import Category
 from .cart import Cart,CartItem
-from .order import Order,OrderItem
+from .order import Order,OrderItem,Status
 
 from database.connection import engine
 from models.base import Base
