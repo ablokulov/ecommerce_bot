@@ -7,5 +7,6 @@ DB_USER=config("DB_USER")
 DB_PASS=config("DB_PASS")
 DB_PORT=config("DB_PORT")
 DB_HOST=config("DB_HOST")
+ADMIN=config("ADMIN")
     
     

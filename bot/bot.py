@@ -1,27 +1,16 @@
 from telegram.ext import Application,CommandHandler,MessageHandler,filters,CallbackQueryHandler,ConversationHandler
 
-from config import TOKEN
-from bot.handlers.reply import (
-    start_handler,helping,products_handler,
-    show_menu_handler,add_to_cart,show_cart,
-    get_address
-)
-
-from bot.handlers.inline import clothes_handler,product_detail
+from bot.handlers.start import start_handler,helping,show_menu_handler
+from bot.handlers.cart import show_cart,add_to_cart
+from bot.handlers.product import product_detail,product_inlene_handler,products_handler
 from bot.handlers.order import show_orders,order_detail
-from bot.states import checkout_start
-from bot.states.checkout_state import PHONE,ADDRESS,get_phone
+from bot.handlers.support import send_to_admin,contact_start,CONTACT,checkout_conv
 
-    
-    
-checkout_conv = ConversationHandler(
-    entry_points=[CallbackQueryHandler(checkout_start, pattern="^checkout$")],
-    states={
-        PHONE:   [MessageHandler(filters.TEXT & ~filters.COMMAND, get_phone)],
-        ADDRESS: [MessageHandler(filters.TEXT & ~filters.COMMAND, get_address)],
-    },
-    fallbacks=[],
-)
+
+from config import TOKEN
+
+from telegram.ext import ConversationHandler, MessageHandler, filters
+
 
 
 
@@ -39,19 +28,19 @@ def run():
         filters.TEXT & filters.Regex("🛍 Mahsulotlar"),products_handler
     ))
     app.add_handler(MessageHandler(
-        filters.TEXT & filters.Regex("👕 Kiyimlar"),clothes_handler
+        filters.TEXT & filters.Regex("👕 Kiyimlar"),product_inlene_handler
     ))
     
     app.add_handler(MessageHandler(
-        filters.TEXT & filters.Regex("👟 Oyoq kiyim"),clothes_handler
+        filters.TEXT & filters.Regex("👟 Oyoq kiyim"),product_inlene_handler
     ))
     
     app.add_handler(MessageHandler(
-        filters.TEXT & filters.Regex("📱 Elektronika"),clothes_handler
+        filters.TEXT & filters.Regex("📱 Elektronika"),product_inlene_handler
     ))
     
     app.add_handler(MessageHandler(
-        filters.TEXT & filters.Regex("🎒 Aksessuarlar"),clothes_handler
+        filters.TEXT & filters.Regex("🎒 Aksessuarlar"),product_inlene_handler
     ))
     
     app.add_handler(MessageHandler(
@@ -65,6 +54,7 @@ def run():
     app.add_handler(MessageHandler(
         filters.TEXT & filters.Regex("📦 Buyurtmalarim"),show_orders
     ))
+
      
     # Callback query Handler
     
@@ -79,7 +69,32 @@ def run():
     app.add_handler(
     CallbackQueryHandler(order_detail, pattern="^order_")
 )
+    contact_conv = ConversationHandler(
+
+        entry_points=[
+            MessageHandler(
+                filters.TEXT & filters.Regex("^📞 Bog‘lanish$"),
+                contact_start
+            )
+        ],
+
+        states={
+            CONTACT: [
+                MessageHandler(filters.TEXT , send_to_admin)
+            ]
+        },
+
+        fallbacks=[]
+    )
+    
+
+
+    app.add_handler(contact_conv)
     app.add_handler(checkout_conv)
+
+
     
 
     app.run_polling()
+    
+    

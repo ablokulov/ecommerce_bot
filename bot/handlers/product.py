@@ -1,14 +1,41 @@
-
 from telegram.ext import ContextTypes
-from telegram import Update
+
 from telegram import (
-    InlineKeyboardButton,InlineKeyboardMarkup
+    Update,InlineKeyboardButton,InlineKeyboardMarkup,
+    KeyboardButton,ReplyKeyboardMarkup
 )
 
 from database.session import SessionLocal
 from models import Product
 
-async def clothes_handler(update:Update,context: ContextTypes):
+
+async def products_handler(update,context):
+    
+    keyboard = [
+        [
+            KeyboardButton('👕 Kiyimlar'),
+            KeyboardButton('👟 Oyoq kiyim')
+        ],
+        [
+            KeyboardButton('📱 Elektronika'),
+            KeyboardButton('🎒 Aksessuarlar')
+        ],
+        [
+            KeyboardButton('🏘 Bosh meniu')
+        ]
+    ]
+    
+    reply_kb = ReplyKeyboardMarkup(
+        keyboard,resize_keyboard=True
+    )
+    
+    await update.message.reply_text("""🛍 Mahsulotlar katalogi
+
+    Kerakli kategoriyani tanlang 👇
+    """,reply_markup=reply_kb)
+    
+
+async def product_inlene_handler(update:Update,context: ContextTypes):
     
     text = update.message.text
     
@@ -56,14 +83,14 @@ async def product_detail(update: Update, context: ContextTypes.DEFAULT_TYPE):
         product = session.get(Product, product_id)
 
         caption = f"""
-🛍 <b>{product.name}</b>
+    🛍 <b>{product.name}</b>
 
-💰 <b>{product.price:,} so'm</b>
+    💰 <b>{product.price:,} so'm</b>
 
-📄 {product.description}
+    📄 {product.description}
 
-🚚 24 soatda yetkazib beriladi
-"""
+    🚚 24 soatda yetkazib beriladi
+    """
 
         keyboard = [
             [
